@@ -16,6 +16,47 @@
             text-align: center;
             margin-top: 20px;
         }
+        .clock {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border: 10px solid #333;
+            border-radius: 50%;
+            margin: 50px auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .clock .center {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #333;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .hand {
+            position: absolute;
+            width: 50%;
+            height: 6px;
+            background: #333;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+            transition-timing-function: steps(60);
+            transition: all 0.05s;
+        }
+        .hand.second {
+            height: 2px;
+            background: red;
+        }
+        .hand.minute {
+            height: 4px;
+        }
+        .hand.hour {
+            width: 35%;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +95,15 @@
                 <ul class="list-unstyled">
                     <li>Mondays: 10:00 PM - 11:00 PM</li>
                 </ul>
+
+                <!-- Animated Wall Clock -->
+                <div class="clock">
+                    <div class="hand hour" id="hour"></div>
+                    <div class="hand minute" id="minute"></div>
+                    <div class="hand second" id="second"></div>
+                    <div class="center"></div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -61,5 +111,27 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function setClock() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
+            const secondHand = document.getElementById('second');
+            const minuteHand = document.getElementById('minute');
+            const hourHand = document.getElementById('hour');
+
+            const secondDegrees = ((seconds / 60) * 360) + 90;
+            const minuteDegrees = ((minutes / 60) * 360) + ((seconds/60)*6) + 90;
+            const hourDegrees = ((hours / 12) * 360) + ((minutes/60)*30) + 90;
+
+            secondHand.style.transform = `rotate(${secondDegrees}deg)`;
+            minuteHand.style.transform = `rotate(${minuteDegrees}deg)`;
+            hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+        }
+
+        setInterval(setClock, 1000);
+        setClock(); // Initial call to set the clock immediately
+    </script>
 </body>
 </html>
